@@ -52,8 +52,9 @@ const RootLayout = ({ children }: LayoutProps<"/">) => (
                     <main
                         id="content"
                         className="
-                            flex-1 h-full min-w-0 overflow-y-auto p-6 
-                            max-mobile:p-4 max-mobile:pt-14
+                            flex-1 h-full min-w-0 overflow-y-auto
+                            p-6 max-mobile:p-4 max-mobile:pt-14
+                            mx-auto flex flex-col gap-6
                         "
                     >
                         {children}
