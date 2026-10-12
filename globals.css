@@ -1,0 +1,236 @@
+@import "tailwindcss";
+
+@source inline("{bg-mint-50,bg-mint-100,bg-mint-200,bg-amber-100,bg-grey-150,bg-error-100,text-mint-300,text-amber-200,text-grey-200,text-grey-300,text-white,text-error}!");
+
+@plugin "daisyui" {
+	themes: light --default;
+	root: ":root";
+	include: ;
+	exclude: ;
+	prefix: ;
+	logs: false;
+}
+
+@plugin "daisyui/theme" {
+	name: "light";
+	default: true;
+	--color-primary: #7AC3A3;
+	--color-primary-content: #FFFFFF;
+	--color-base-100: #FFFFFF;
+	--color-base-content: #1E1E1E;
+}
+
+@theme {
+    /* Colors */
+	--color-primary: #7AC3A3;
+	--color-mint-50: #F1F8F4;
+	--color-mint-100: #BCE1D1;
+	--color-mint-200: #7AC3A3;
+	--color-mint-300: #3E8A68;
+	--color-charcoal-100: #1E1E1E;
+	--color-grey-300: #5C5A58;
+	--color-grey-200: #8F8C8A;
+	--color-grey-150: #EFEDEC;
+	--color-grey-100: #E7E5E4;
+	--color-paper: #FFFFFF;
+	--color-default: #F7F7F5;
+	--color-amber-100: #FBEFD9;
+	--color-amber-200: #9A6412;
+	--color-error-100: #FBE9E7;
+	--color-error: #A8321F;
+
+	/* Fonts */
+	--font-main: var(--font-nunito), "Nunito Sans", sans-serif;
+	--font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+	/* Screens */
+	--breakpoint-mobile: 640px;
+	--breakpoint-tablet: 1030px;
+	--breakpoint-desktop: 1600px;
+
+	/* Animation */
+	--animate-modal: modalAnimation 0.1s ease-in-out;
+	--animate-slide-in-bottom: slideInBottom 0.1s ease-in-out;
+	--animate-slide-in-top: slideInTop 0.1s ease-in-out;
+	--animate-slide-in-left: slideInLeft 0.1s ease-in-out;
+	--animate-slide-in-right: slideInRight 0.1s ease-in-out;
+	--animate-fade-in: fadeIn 0.9s ease-in-out;
+	--animate-fade-in-fast: fadeIn 0.3s ease-in-out;
+	--animate-fade-out-fast: fadeOut 0.3s forwards;
+	--animate-scale-in: scaleIn 01s ease-in-out;
+	--animate-card-in: cardIn 0.5s ease-in-out;
+
+	@keyframes modalAnimation {
+		0% {
+			opacity: 0;
+			transform: scale(0.95);
+		}
+		100% {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+
+    @keyframes cardIn {
+        from {
+            opacity: 0;
+            transform: translateY(12px) scale(0.98);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+	/* Bottom → Top */
+	@keyframes slideInBottom {
+		0% {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	/* Top → Bottom */
+	@keyframes slideInTop {
+		0% {
+			opacity: 0;
+			transform: translateY(-20px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	/* Left → Right */
+	@keyframes slideInLeft {
+		0% {
+			opacity: 0;
+			transform: translateX(-20px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateX(0);
+		}
+	}
+
+	/* Right → Left */
+	@keyframes slideInRight {
+		0% {
+			opacity: 0;
+			transform: translateX(20px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateX(0);
+		}
+	}
+
+	/* Fade */
+	@keyframes fadeIn {
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+
+	@keyframes fadeOut {
+		0% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
+
+
+	/* Scale */
+	@keyframes scaleIn {
+		0% {
+			opacity: 0;
+			transform: scale(0.9);
+		}
+		100% {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+}
+
+:root {
+	--background: var(--color-default);
+	--foreground: var(--color-charcoal-100);
+}
+
+@layer utilities {
+    .no-scrollbar {
+        -ms-overflow-style: none !important;
+		scrollbar-width: none !important;
+	}
+    .no-scrollbar::-webkit-scrollbar {
+        display: none !important;
+    }
+	. {
+		font-family: var(--font-mono);
+		font-size: 11px;
+		letter-spacing: 0.02em;
+		color: var(--color-grey-200);
+	}
+}
+
+body {
+	color: var(--foreground);
+	background: var(--background);
+}
+
+fieldset{
+	border: none
+}
+
+svg{
+	overflow: visible;
+	fill: currentColor;
+	stroke: currentColor;
+}
+
+.smooth{
+	transition: all ease-in-out;
+	transition-duration: 200ms;
+}
+
+.chat-start .chat-bubble {
+	@apply rounded-tl-none rounded-md;
+}
+.chat-end .chat-bubble {
+	@apply rounded-tr-none rounded-md;
+}
+.chat-start .chat-bubble:before {
+	@apply top-0 [transform:rotateX(180deg)];
+}
+.chat-end .chat-bubble:before {
+	@apply top-0 [transform:rotateZ(180deg)];
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	transition: background-color 5000s ease-in-out 0s;
+}
+
+*{
+	scrollbar-width: thin;
+	scrollbar-color: transparent transparent;
+}
+
+*:hover {
+	scrollbar-color: var(--color-grey-100) transparent;
+	transition: all ease-in-out;
+	transition-duration: 200ms;
+}

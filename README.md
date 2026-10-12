@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Motif App
 
-## Getting Started
+Next.js 16 frontend for Motif. It talks to the Go API in `../core` from server components and server actions only; the browser never calls the API directly.
 
-First, run the development server:
+## Setup
 
 ```bash
-npm run dev
-# or
+cp .env.example .env.local
+yarn install
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). The API must be running on `API_URL` (default `http://localhost:8000/api/v1`), otherwise every page shows a "Can't reach the Motif API" error state.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Command | What it does |
+|---------|--------------|
+| `yarn dev` | Dev server with Turbopack |
+| `yarn build` | Production build (every route is a partial prerender) |
+| `yarn start` | Serve the production build |
+| `yarn lint` | ESLint |
+| `npx tsc --noEmit` | Type check (run `npx next typegen` first on a clean checkout) |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Screens
 
-## Learn More
+| Route | Screen |
+|-------|--------|
+| `/` | Leads portal: campaign selector, stats, searchable / filterable / sortable target table with inline priority and stage edits, CSV import, add company |
+| `/campaigns` | Campaign cards, including archived ones |
+| `/campaigns/new` | Five-step setup wizard: basics, ICP, documents, workflow, review |
+| `/campaigns/[id]` | Campaign settings: basics, status, workflow, ICP edit, documents, delete |
+| `/companies/[id]` | Target research: profile, ICP criteria check, findings, risks, next actions, outreach drafts, research chat |
+| `/inbound` | Inbound deals: status tabs, detail, ICP fit, reply drafts, Gmail setup state |
 
-To learn more about Next.js, take a look at the following resources:
+Query params drive state so every view is linkable: `?campaign=`, `?q=`, `?sort=`, `?priority=`, `?research_status=`, `?evaluation_status=`, `?page=`, `?status=`, `?id=`, `?tab=`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/          routes, layout, loading / error / not-found
+base/         primitives from Stitchd (Button, TextField, Select, Modal, ToggleGroup, Tooltip...)
+components/   feature folders, each with index.ts barrel and actions.ts server actions
+context/      ChatProvider, PortalProvider
+data/         status meta (labels, colours, tooltips) and filter definitions
+hooks/        useMouse, useShortcut, useSearchParam
+icons/        SVG icon components
+lib/api/      _GET/_POST/_PATCH/_PUT/_DELETE helpers and one file per resource
+lib/types/    IRaw* API shapes and serialize* functions to camelCase
+lib/common/   cn, formatters, query parsing
+```
 
-## Deploy on Vercel
+Conventions come from the Lens app and Stitchd: `// #region imports`, `"use server"` action files that call `refresh()` after a mutation, `useOptimistic` for inline edits, and async sections wrapped in `<Suspense>` with matching skeletons.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Honest states
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Fit scores and seed companies are labelled **Sample**. Nothing computes a score yet.
+- The "Why it matches the ICP" panel is a rule-based comparison of profile fields against the ICP, not AI.
+- "Run AI research" and the research chat show a setup-required state until a research provider is wired in the API.
+- Gmail sync shows the missing environment variables reported by the API. Inbound deals are seed data or logged by hand.
+- Drafts can be edited, reviewed and copied. Send is disabled; Motif never sends email.
+- Uploaded documents are stored with metadata only and marked "Not parsed".
