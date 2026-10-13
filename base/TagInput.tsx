@@ -77,7 +77,7 @@ const TagInput = ({
                             key={tag}
                             className={cn(
                                 "inline-flex items-center gap-1.5 h-6 pl-2 pr-1.5 rounded-md text-xs font-semibold",
-                                tone === "mint" ? "bg-mint-50 text-mint-300" : "bg-grey-150 text-error-200"
+                                tone === "mint" ? "bg-mint-50 text-mint-300" : "bg-error-100 text-error-200"
                             )}
                         >
                             {tag}
@@ -87,7 +87,7 @@ const TagInput = ({
                                 size="xs"
                                 aria-label={`Remove ${tag}`}
                                 onClick={() => onChange(value.filter(item => item !== tag))}
-                                className="!w-5 !h-5 opacity-60 hover:opacity-100"
+                                className="w-5! h-5! opacity-60 hover:opacity-100"
                             >
                                 <Cancel size={6}/>
                             </IconButton>

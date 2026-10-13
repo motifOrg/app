@@ -30,6 +30,10 @@ export const TONES = {
         className: "bg-error-100 text-error-200",
         style: { backgroundColor: "var(--color-error-100)", color: "var(--color-error-200)" },
     },
+    purple: {
+        className: "bg-purple-100 text-purple-200",
+        style: { backgroundColor: "var(--color-purple-100)", color: "var(--color-purple-200)" },
+    },
 } satisfies Record<string, ITone>
 
 const tone = (label: string, name: keyof typeof TONES) => ({ label, ...TONES[name] })
@@ -37,7 +41,7 @@ const tone = (label: string, name: keyof typeof TONES) => ({ label, ...TONES[nam
 export const PRIORITY_META = {
     high: tone("High", "mint"),
     medium: tone("Medium", "amber"),
-    low: tone("Low", "grey"),
+    low: tone("Low", "error"),
 }
 
 export const RESEARCH_META = {
@@ -84,15 +88,15 @@ export const EVIDENCE_META = {
 
 export const WORKFLOW_META = {
     outbound: {
-        label: "Outbound sourcing",
+        ...tone("Outbound Sourcing", "mint"),
         description: "Build a target list from our data providers filtered against the ICP.",
     },
     inbound: {
-        label: "Inbound evaluation",
+        ...tone("Inbound Evaluation", "blue"),
         description: "Log deals brokers and owners send you, and evaluate against the ICP.",
     },
     both: {
-        label: "Both",
+        ...tone("Both", "purple"),
         description: "Run outbound sourcing and inbound evaluation against the same ICP.",
     },
 } as const

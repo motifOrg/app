@@ -137,8 +137,7 @@ const Basics = ({ campaign }: { campaign: ICampaign }) => {
                 }
 
                 <div className="
-                    grid grid-cols-2 gap-3 
-                    max-mobile:grid-cols-1
+                    flex flex-col gap-4
                 ">
                     <Select
                         required
@@ -146,6 +145,7 @@ const Basics = ({ campaign }: { campaign: ICampaign }) => {
                         options={_STATUS_OPTIONS}
                         selected={campaign.status}
                         disabled={isPending}
+                        buttonStyle={CAMPAIGN_META[campaign.status].style}
                         onChange={option => option && option.value !== campaign.status &&
                             save({ status: option.value as CAMPAIGN_STATUS })
                         }
@@ -156,6 +156,7 @@ const Basics = ({ campaign }: { campaign: ICampaign }) => {
                         options={_WORKFLOW_OPTIONS}
                         selected={campaign.workflow}
                         disabled={isPending}
+                        buttonStyle={WORKFLOW_META[campaign.workflow].style}
                         onChange={option => option && option.value !== campaign.workflow &&
                             save({ workflow: option.value as WORKFLOW })
                         }

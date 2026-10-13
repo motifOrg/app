@@ -1,0 +1,123 @@
+"use client"
+
+// #region imports
+import {
+    useState,
+    useTransition,
+} from "react"
+
+import {
+    Button,
+    Information,
+} from "@/base"
+
+import { Mail, Plus } from "@/icons"
+import { cn, IDraft } from "@/lib"
+
+import { EmptyState } from "../Navigation"
+import { createDraftAction } from "./actions"
+import { DraftEditor } from "./DraftEditor"
+// #endregion
+
+export const Drafts = ({ drafts, companyId, opportunityId, kind }: {
+    drafts: IDraft[]
+    companyId?: string
+    opportunityId?: string
+    kind: "outreach" | "reply"
+}) => {
+    const [selected, setSelected] = useState<string | undefined>(drafts[0]?.id)
+    const [error, setError] = useState<string>()
+    const [isPending, startTransition] = useTransition()
+
+    const create = () => startTransition(async () => {
+        setError(undefined)
+        const res = await createDraftAction({
+            company_id: companyId,
+            opportunity_id: opportunityId,
+        })
+        if (!res.success) setError(res.error ?? "Couldn't create a draft")
+        else setSelected(undefined)
+    })
+
+    const active = drafts.find(draft => draft.id === selected) ?? drafts[0]
+    const label = kind === "outreach" ? "outreach email" : "reply"
+
+    if (drafts.length === 0)
+        return (
+            <aside className="flex flex-col gap-3">
+                <EmptyState
+                    icon={<Mail size={16}/>}
+                    title={`No ${label} drafted yet`}
+                    description={
+                        kind === "outreach"
+                            ? "Start from a template filled in with this company's details. Edit it, mark it reviewed, then copy it into your mail client."
+                            : "Start a reply from a template that references the deal. Nothing is sent from Motif."
+                    }
+                    action={
+                        <Button 
+                            size="sm" 
+                            startIcon={<Plus size={11}/>} 
+                            loading={isPending} 
+                            loadingText="Drafting" 
+                            onClick={create}
+                        >
+                            Draft {label}
+                        </Button>
+                    }
+                />
+                {
+                    error && 
+                    <Information 
+                        variant="error" 
+                        description={error}
+                    />
+                }
+            </aside>
+        )
+
+    return (
+        <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-1.5 flex-wrap">
+                {
+                    drafts.map((draft, index) =>
+                        <Button
+                            key={draft.id}
+                            type="button"
+                            variant={draft.id === active?.id ? "primary" : "secondary"}
+                            size="xs"
+                            onClick={() => setSelected(draft.id)}
+                        >
+                            Draft {drafts.length - index}
+                            {draft.status === "reviewed" && " ✓"}
+                        </Button>
+                    )
+                }
+                <Button 
+                    variant="ghost" 
+                    size="xs" 
+                    startIcon={<Plus size={10}/>} 
+                    loading={isPending} 
+                    loadingText="Drafting" 
+                    onClick={create}
+                >
+                    New draft
+                </Button>
+            </div>
+
+            {
+                error && 
+                <Information 
+                    variant="error" 
+                    description={error}
+                />
+            }
+            {
+                active && 
+                <DraftEditor 
+                    key={`${active.id}-${active.updatedAt.getTime()}`} 
+                    draft={active}
+                />
+            }
+        </div>
+    )
+}
