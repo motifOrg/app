@@ -42,7 +42,7 @@ const textFieldVariants = {
 	colors: {
 		default: "text-charcoal-100",
 		disabled: "text-grey-200",
-		error: "text-error",
+		error: "text-error-200",
 		success: "text-green-500"
 	}
 }
@@ -98,7 +98,7 @@ const TextField = forwardRef<HTMLInputElement, ITextFieldProps>(
 			textFieldVariants.sizes[size],
 			fullWidth && "w-full",
 			label && "mt-6",
-            error && "border-error! ring-error ring-1 ring-inset",
+            error && "border-error-200! ring-error-200 ring-1 ring-inset",
 			className
 		)
 
@@ -153,7 +153,7 @@ const TextField = forwardRef<HTMLInputElement, ITextFieldProps>(
                             "text-xs font-medium absolute -top-5.5 right-0",
 							
                             error ?
-							"text-error animate-fade-in-fast" :
+							"text-error-200 animate-fade-in-fast" :
 							"text-grey-200"
                         )}
                     >

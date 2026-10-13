@@ -13,7 +13,7 @@ import { cn } from "@/lib"
 const informationVariants = {
 	info: "bg-mint-50 text-charcoal-100 [&_svg]:fill-mint-300 ring-mint-100",
 	warning: "bg-amber-100 text-amber-200 [&_svg]:fill-amber-200 ring-amber-100",
-	error: "bg-grey-150 text-error-100 [&_svg]:fill-error-100 ring-grey-100",
+	error: "bg-grey-150 text-error-200 [&_svg]:fill-error-200 ring-grey-100",
 	neutral: "bg-grey-150 text-grey-300 [&_svg]:fill-grey-200 ring-grey-100",
 }
 

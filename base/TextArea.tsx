@@ -94,7 +94,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, ITextAreaProps>(
             textAreaVariants.base,
             textAreaVariants.variants[variant],
             textAreaVariants.sizes[size],
-            error && "border-error! ring-error ring-1 ring-inset",
+            error && "border-error-200! ring-error-200 ring-1 ring-inset",
             fullWidth && "w-full",
             label && "mt-6",
             className
@@ -151,7 +151,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, ITextAreaProps>(
                     <label
                         className={cn(
                             "text-xs font-medium absolute -top-5.5 right-0",
-                            error ? "text-error" : "text-grey-200"
+                            error ? "text-error-200" : "text-grey-200"
                         )}
                     >
                         {helperText}

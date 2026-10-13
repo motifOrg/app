@@ -30,8 +30,8 @@ const iconButtonVariants = {
 			active:ring-charcoal-100
 		`,
 		danger: `
-			[&>svg]:fill-error
-			active:ring-error
+			[&>svg]:fill-error-200
+			active:ring-error-200
 		`,
 		neutral: `
 			[&>svg]:fill-grey-200

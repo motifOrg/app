@@ -26,7 +26,7 @@ import {
     PRIORITY,
 } from "@/lib"
 
-import { FitScore } from "@/components/FitScore"
+import { FitScore } from "@/components/Pills/FitScore"
 import { SortHeader } from "@/components/Leads/SortHeader"
 
 import { updateCompanyAction } from "@/components/Leads/actions"

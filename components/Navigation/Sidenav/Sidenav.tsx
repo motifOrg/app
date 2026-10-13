@@ -100,7 +100,7 @@ export const Sidenav = ({ campaigns, error }: {
                 )}
             >
                 <header className={cn(
-                    "flex items-center gap-2 smooth pl-1",
+                    "flex items-center gap-2 smooth",
                     expanded ? "justify-between" : "justify-center",
                 )}>
                     <aside className="flex items-center gap-2.5">
@@ -120,17 +120,17 @@ export const Sidenav = ({ campaigns, error }: {
                                     className="group relative text-primary"
                                 >
                                     <Logo
-                                        size={32}
+                                        size={28}
                                         className="group-hover:opacity-0 smooth absolute"
                                     />
                                     <Collapse
-                                        size={18}
+                                        size={15}
                                         className="opacity-0 rotate-180 group-hover:opacity-100 smooth absolute"
                                     />
                                 </IconButton>
                             </Tooltip> :
                             <h2 className="
-                                text-xl text-primary 
+                                text-xl text-mint-300 pl-1
                                 font-medium tracking-tight
                             ">
                                 Motif
@@ -151,7 +151,7 @@ export const Sidenav = ({ campaigns, error }: {
                                 onClick={toggle}
                                 aria-label="Collapse navigation"
                             >
-                                <Collapse size={18} className="smooth text-grey-200"/>
+                                <Collapse size={15} className="smooth text-grey-200"/>
                             </IconButton>
                         </Tooltip>
                     }

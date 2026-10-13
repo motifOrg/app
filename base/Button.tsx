@@ -34,8 +34,8 @@ const buttonVariants = {
 		`,
 
 		danger: `
-			bg-error hover:brightness-110 active:brightness-95
-			text-white fill-white active:ring-error!
+			bg-error-200 hover:brightness-110 active:brightness-95
+			text-white fill-white active:ring-error-200!
 		`,
 
 		neutral: `
