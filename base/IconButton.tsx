@@ -14,15 +14,16 @@ import {
 
 const iconButtonVariants = {
 	base: `
-		inline-flex items-center justify-center rounded-lg
-		smooth active:scale-98 focus:outline-none
-		cursor-pointer disabled:opacity-50 shrink-0
+		inline-flex items-center justify-center rounded-full
+		smooth active:scale-98 focus:outline-none focus:ring-2
+		ring-white desktop:scale-120 cursor-pointer disabled:opacity-50
 		disabled:cursor-not-allowed [&>svg]:pointer-events-none
 	`,
 	variants: {
 		primary: `
 			[&>svg]:fill-mint-300
 			hover:bg-mint-50
+			active:ring-mint-300
 		`,
 		secondary: `
 			[&>svg]:fill-charcoal-100
@@ -39,6 +40,7 @@ const iconButtonVariants = {
 		ghost: `
 			[&>svg]:fill-grey-300 hover:bg-grey-150
 			hover:[&>svg]:fill-charcoal-100
+			active:ring-grey-200
 		`,
 		transparent: `
 			[&>svg]:fill-white
@@ -47,6 +49,8 @@ const iconButtonVariants = {
 		`,
         fill: `
             bg-mint-100 text-mint-300 [&>svg]:fill-mint-300
+			active:ring-transparent
+			focus:ring-transparent
 		`,
 	},
 	sizes: {

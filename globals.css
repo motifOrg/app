@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@source inline("{bg-mint-50,bg-mint-100,bg-mint-200,bg-amber-100,bg-grey-150,bg-error-100,text-mint-300,text-amber-200,text-grey-200,text-grey-300,text-white,text-error}!");
-
 @plugin "daisyui" {
 	themes: light --default;
 	root: ":root";
@@ -36,8 +34,16 @@
 	--color-default: #F7F7F5;
 	--color-amber-100: #FBEFD9;
 	--color-amber-200: #9A6412;
-	--color-error-100: #FBE9E7;
-	--color-error: #A8321F;
+	--color-purple-200: #9180F1;
+	--color-purple-100: #DDD7FF;
+
+	--color-blue-200: #2862C2;
+	--color-blue-100: #4285F4;
+	--color-blue-50: #DFEAFD;
+
+	--color-error: #770909;
+    --color-error-100: #FFE9E9;
+	--color-error-200: #770909;
 
 	/* Fonts */
 	--font-main: var(--font-nunito), "Nunito Sans", sans-serif;
@@ -176,12 +182,12 @@
     .no-scrollbar::-webkit-scrollbar {
         display: none !important;
     }
-	. {
-		font-family: var(--font-mono);
-		font-size: 11px;
-		letter-spacing: 0.02em;
-		color: var(--color-grey-200);
-	}
+
+    .text-caption {
+        font-size: 11px;
+        letter-spacing: 0.02em;
+        color: var(--color-grey-200);
+    }
 }
 
 body {

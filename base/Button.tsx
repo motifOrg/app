@@ -17,35 +17,31 @@ const buttonVariants = {
 	base: `
 		flex items-center justify-center gap-2 select-none
 		rounded-lg font-main font-semibold text-sm
-		normal-case smooth active:scale-98 active:outline-none
-		shrink-0 disabled:opacity-50 whitespace-nowrap
+		normal-case smooth active:scale-98 active:outline-none active:ring-2
+		active:ring-offset-2 shrink-0 disabled:opacity-50 whitespace-nowrap
         disabled:cursor-not-allowed cursor-pointer
 	`,
 
 	variants: {
 		secondary: `
 			bg-paper hover:bg-grey-150 active:brightness-95 text-charcoal-100
-			ring-1 ring-grey-100 fill-charcoal-100
+			ring-1 ring-grey-100 fill-charcoal-100 active:ring-mint-300!
 		`,
 
 		primary: `
 			bg-mint-300 hover:brightness-110 active:brightness-95
-			text-white fill-white
-		`,
-
-		soft: `
-			bg-mint-100 hover:bg-mint-200 active:brightness-95
-			text-mint-300 hover:text-white fill-mint-300 hover:fill-white
+			text-white fill-white active:ring-mint-300!
 		`,
 
 		danger: `
 			bg-error hover:brightness-110 active:brightness-95
-			text-white fill-white
+			text-white fill-white active:ring-error!
 		`,
 
 		neutral: `
 			bg-paper active:brightness-95 text-grey-300
 			fill-grey-300 ring-1 ring-grey-100 hover:text-charcoal-100
+			active:ring-mint-300!
 		`,
 
 		ghost: `
@@ -55,7 +51,7 @@ const buttonVariants = {
 
 		inverted: `
 			bg-white hover:bg-grey-150 active:brightness-95
-			text-grey-200 fill-white group ring-grey-100
+			text-grey-200 fill-white active:ring-charcoal-100 group ring-grey-100
 		`,
         text: `
 			bg-none text-grey-200  group

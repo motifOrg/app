@@ -17,6 +17,7 @@ const checkboxVariants = {
         disabled:cursor-not-allowed smooth
 		border border-grey-200 checked:bg-mint-300
 		rounded-sm checked:border-mint-300 checked:text-white
+		focus:ring-2 ring-mint-200 focus:ring-offset-2
 	`,
 	sizes: {
 		sm: "checkbox-sm",

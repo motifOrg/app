@@ -2,6 +2,7 @@
 
 // #region imports
 import {
+	CSSProperties,
 	forwardRef,
 	isValidElement,
 	ReactElement,
@@ -33,6 +34,7 @@ export interface ISelectProps<T> {
 	variant?: "primary" | "neutral"
 	className?: string
 	buttonClassName?: string
+	buttonStyle?: CSSProperties
 	dropClassName?: string
 	onChange?: (value: T | undefined) => void
 }
@@ -54,6 +56,7 @@ const Select = <T extends string | ISelectOption | ReactNode>(
 		required = false,
 		className = "",
 		buttonClassName = "",
+		buttonStyle,
 		dropClassName = "",
 		onChange
 	}: ISelectProps<T>,
@@ -113,7 +116,11 @@ const Select = <T extends string | ISelectOption | ReactNode>(
     )
 
 	return (
-		<div ref={ref} className={wrapperClasses}>
+		<div
+			ref={ref}
+			className={wrapperClasses}
+			onClick={e => e.stopPropagation()}
+		>
             {name && (
                 <input
                     type="hidden"
@@ -153,12 +160,14 @@ const Select = <T extends string | ISelectOption | ReactNode>(
 				tabIndex={0}
 				variant="inverted"
 				size="full"
-				textClassName="text-ellipsis truncate text-left font-normal"
-				endIcon={<span className="ml-2 text-grey-200 text-xs">&#9662;</span>}
+				style={buttonStyle}
+				textClassName="text-ellipsis truncate text-left font-semibold"
+				endIcon={<span className="ml-2 text-xs opacity-60">&#9662;</span>}
 				disabled={disabled}
 				data-selected={!!selectedOption}
 				className={cn(
-                    "rounded-lg ring-1! ring-grey-100! relative data-[selected=true]:text-charcoal-100 px-3!",
+                    "rounded-lg ring-1! ring-transparent! relative px-3!",
+                    "data-[selected=true]:text-charcoal-100",
                     "focus:ring-mint-200! focus:ring-2!",
                     error && "ring-error! ring-1! ring-inset!",
                     buttonClassName

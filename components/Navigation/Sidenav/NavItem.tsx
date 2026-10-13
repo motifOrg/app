@@ -27,7 +27,7 @@ export const NavItem = ({ href, icon, label, active, open, badge }: {
                 open ? "px-1" : "justify-center w-9",
             )}
         >
-            <span className="shrink-0">{icon}</span>
+            {icon}
             {open && <span className="flex-1 truncate pr-1">{label}</span>}
             {
                 open && !!badge &&
@@ -43,5 +43,7 @@ export const NavItem = ({ href, icon, label, active, open, badge }: {
 
     return open
         ? item
-        : <Tooltip content={label} side="right">{item}</Tooltip>
+        : <Tooltip content={label} side="right">
+            {item}
+          </Tooltip>
 }

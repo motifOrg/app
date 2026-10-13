@@ -32,7 +32,7 @@ const textAreaVariants = {
         outlined: `
             bg-white border border-grey-100 hover:border-grey-200/60
             focus-within:border-mint-200
-            focus-within:ring-2 focus-within:ring-mint-100
+            focus-within:ring-1 focus-within:ring-mint-200 focus-within:ring-inset
         `
     },
     sizes: {
@@ -94,7 +94,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, ITextAreaProps>(
             textAreaVariants.base,
             textAreaVariants.variants[variant],
             textAreaVariants.sizes[size],
-            error && "border-error! ring-1 ring-error-100",
+            error && "border-error! ring-error ring-1 ring-inset",
             fullWidth && "w-full",
             label && "mt-6",
             className

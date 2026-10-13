@@ -91,16 +91,3 @@ export const capitalize = (value?: string) => {
         )
         .join(" ")
 }
-
-export const navHref = (href: string, open: boolean) => {
-    const [path, query = ""] = href.split("?")
-    const params = new URLSearchParams(query)
-
-    if (!open)
-        params.set("nav", "closed")
-    else
-        params.delete("nav")
-
-    const next = params.toString()
-    return next ? `${path}?${next}` : path
-}

@@ -13,6 +13,9 @@ import {
 	useSearchParams
 } from "next/navigation"
 
+import Button from "./Button"
+import IconButton from "./IconButton"
+
 import {
 	cn
 } from "@/lib"
@@ -136,24 +139,30 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 				{...props}
 			>
 				{showFirstButton && (
-					<button
+					<IconButton
+						type="button"
+						variant="ghost"
+						size="sm"
 						className={navBtnClasses}
 						disabled={disabled || page === 1}
 						onClick={handleClick(1)}
 						aria-label="Go to first page"
 					>
 						<Chevron direction="left" size={10} />
-					</button>
+					</IconButton>
 				)}
 
-				<button
+				<IconButton
+					type="button"
+					variant="ghost"
+					size="sm"
 					className={navBtnClasses}
 					disabled={disabled || page === 1}
 					onClick={handleClick(page - 1)}
 					aria-label="Go to previous page"
 				>
 					<Chevron direction="left" size={10} />
-				</button>
+				</IconButton>
 
 				{pages.map((p, idx) =>
 					p === "ellipsis" ? (
@@ -161,8 +170,11 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 							…
 						</span>
 					) : (
-						<button
+						<Button
 							key={p}
+							type="button"
+							variant={p === page ? "soft" : "ghost"}
+							size="xs"
 							className={pageBtnClasses(p === page)}
 							disabled={disabled}
 							onClick={handleClick(p)}
@@ -170,28 +182,34 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 							aria-current={p === page ? "page" : undefined}
 						>
 							{p}
-						</button>
+						</Button>
 					)
 				)}
 
-				<button
+				<IconButton
+					type="button"
+					variant="ghost"
+					size="sm"
 					className={navBtnClasses}
 					disabled={disabled || page === count}
 					onClick={handleClick(page + 1)}
 					aria-label="Go to next page"
 				>
 					<Chevron direction="right" size={10} />
-				</button>
+				</IconButton>
 
 				{showLastButton && (
-					<button
+					<IconButton
+						type="button"
+						variant="ghost"
+						size="sm"
 						className={navBtnClasses}
 						disabled={disabled || page === count}
 						onClick={handleClick(count)}
 						aria-label="Go to last page"
 					>
 						<Chevron direction="right" size={10} />
-					</button>
+					</IconButton>
 				)}
 			</nav>
 		)

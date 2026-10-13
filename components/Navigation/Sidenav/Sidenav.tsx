@@ -25,12 +25,11 @@ import {
     Target,
 } from "@/icons"
 
-import { useSearchParam, useShortcut } from "@/hooks"
+import { useShortcut } from "@/hooks"
 
 import {
     cn,
     ICampaign,
-    navHref,
 } from "@/lib"
 
 import { NavItem } from "./NavItem"
@@ -42,9 +41,8 @@ export const Sidenav = ({ campaigns, error }: {
 }) => {
     const pathname = usePathname()
     const searchParams = useSearchParams()
-    const { set } = useSearchParam()
 
-    const open = searchParams.get("nav") !== "closed"
+    const [open, setOpen] = useState<boolean>(true)
     const [mobile, setMobile] = useState<boolean>(false)
 
     const fromPath = pathname.match(/^\/campaigns\/([^/]+)$/)?.[1]
@@ -57,12 +55,7 @@ export const Sidenav = ({ campaigns, error }: {
         setMobile(false)
     }
 
-    const toggle = () => {
-        set(
-            { nav: open ? "closed" : undefined },
-            { replace: true, reset: [] },
-        )
-    }
+    const toggle = () => setOpen(value => !value)
 
     useShortcut([
         ["mod+B", toggle]
@@ -71,7 +64,7 @@ export const Sidenav = ({ campaigns, error }: {
     const current = campaigns.find(c => c.id === fromUrl) ?? campaigns[0]
     const query = current ? `?campaign=${current.id}` : ""
     const inboundNew = current?.opportunityCount
-    const visible = campaigns.filter(c => c.status !== "archived")
+    const visible = campaigns
 
     const expanded = open || mobile
 
@@ -99,7 +92,7 @@ export const Sidenav = ({ campaigns, error }: {
                 data-open={expanded}
                 data-mobile={mobile}
                 className={cn(
-                    "h-full shrink-0 bg-paper border-r border-grey-100",
+                    "h-[96%] shrink-0 bg-paper border border-grey-100 rounded-2xl ml-6 self-center",
                     "flex flex-col gap-6 py-4 smooth duration-300",
                     "w-16 px-3.5 data-[open=true]:w-60 data-[open=true]:px-3",
                     "max-mobile:fixed max-mobile:z-100 max-mobile:-translate-x-full",
@@ -118,14 +111,13 @@ export const Sidenav = ({ campaigns, error }: {
                                 side="right"
                                 className="max-mobile:hidden"
                             >
-                                <button
+                                <IconButton
                                     type="button"
+                                    variant="neutral"
+                                    size="md"
                                     onClick={toggle}
                                     aria-label="Expand navigation"
-                                    className="
-                                        group size-9 flex items-center justify-center rounded-lg
-                                        text-primary hover:bg-grey-150 cursor-pointer relative
-                                    "
+                                    className="group relative text-primary"
                                 >
                                     <Logo
                                         size={32}
@@ -135,7 +127,7 @@ export const Sidenav = ({ campaigns, error }: {
                                         size={18}
                                         className="opacity-0 rotate-180 group-hover:opacity-100 smooth absolute"
                                     />
-                                </button>
+                                </IconButton>
                             </Tooltip> :
                             <h2 className="
                                 text-xl text-primary 
@@ -154,7 +146,7 @@ export const Sidenav = ({ campaigns, error }: {
                             className="max-mobile:hidden"
                         >
                             <IconButton
-                                variant="ghost"
+                                variant="neutral"
                                 size="sm"
                                 onClick={toggle}
                                 aria-label="Collapse navigation"
@@ -167,7 +159,7 @@ export const Sidenav = ({ campaigns, error }: {
 
                 <section className="flex flex-col gap-1 h-full">
                     <NavItem
-                        href={navHref(`/${query}`, open)}
+                        href={`/${query}`}
                         icon={<Table size={20}/>}
                         label="Leads"
                         open={expanded}
@@ -175,7 +167,7 @@ export const Sidenav = ({ campaigns, error }: {
                     />
 
                     <NavItem
-                        href={navHref(`/inbound${query}`, open)}
+                        href={`/inbound${query}`}
                         icon={<Inbox size={20}/>}
                         label="Inbound"
                         open={expanded}
@@ -189,7 +181,7 @@ export const Sidenav = ({ campaigns, error }: {
                         mt-auto
                     ">
                         <NavItem
-                            href={navHref("/campaigns", open)}
+                            href="/campaigns"
                             icon={<Target size={20} />}
                             label="Campaigns"
                             open={expanded}
@@ -199,7 +191,7 @@ export const Sidenav = ({ campaigns, error }: {
                         {expanded && (
                             <Tooltip content="New campaign" side="left">
                                 <Link
-                                    href={navHref("/campaigns/new", open)}
+                                    href="/campaigns/new"
                                     aria-label="New campaign"
                                     className="w-6 h-6 rounded-md flex items-center justify-center text-grey-200 hover:bg-grey-150 hover:text-charcoal-100 smooth"
                                 >
@@ -215,7 +207,7 @@ export const Sidenav = ({ campaigns, error }: {
 
                             {!error && visible.length === 0 && (
                                 <Link
-                                    href={navHref("/campaigns/new", open)}
+                                    href="/campaigns/new"
                                     className="mx-1 p-3 rounded-lg border border-dashed border-grey-100 text-xs text-grey-200 hover:border-mint-200 hover:text-mint-300 smooth"
                                 >
                                     Create your first campaign to start sourcing.
@@ -226,12 +218,11 @@ export const Sidenav = ({ campaigns, error }: {
                                 {visible.map(campaign => (
                                     <Link
                                         key={campaign.id}
-                                        href={navHref(
+                                        href={
                                             pathname.startsWith("/inbound")
                                                 ? `/inbound?campaign=${campaign.id}`
-                                                : `/?campaign=${campaign.id}`,
-                                            open,
-                                        )}
+                                                : `/?campaign=${campaign.id}`
+                                        }
                                         data-active={
                                             current?.id === campaign.id &&
                                             !["/campaigns", "/campaigns/new"].includes(pathname)

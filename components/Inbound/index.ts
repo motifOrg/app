@@ -1,5 +1,4 @@
 export * from "./GmailSetup"
 export * from "./InboundList"
-export * from "./InboundSection"
 export * from "./OpportunityControls"
 export * from "./OpportunityForm"
