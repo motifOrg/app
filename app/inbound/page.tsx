@@ -244,7 +244,7 @@ const InboundPage = async ({
 				<Information
 					variant="warning"
 					title="Gmail isn't connected"
-					description="Set GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET and GMAIL_REFRESH_TOKEN in core/.env, then restart the API. Until then, log deals by hand."
+					description="Set GMAIL_CREDENTIALS and GMAIL_USER in core/.env, then restart the API. Until then, log deals by hand."
 				/>
 			}
 
