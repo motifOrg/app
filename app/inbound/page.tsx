@@ -231,6 +231,7 @@ const InboundPage = async ({
                             <GmailSetup 
                                 gmail={gmail} 
                                 campaignId={campaign.id}
+                                gmailLabel={campaign.gmailLabel}
                             />
                         }
 						<OpportunityForm campaignId={campaign.id}/>

@@ -34,6 +34,7 @@ export interface ICampaignInput {
     description: string
     workflow: WORKFLOW
     status?: CAMPAIGN_STATUS
+    gmailLabel?: string
     icp?: IICP
 }
 

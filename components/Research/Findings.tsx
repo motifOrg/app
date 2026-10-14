@@ -7,6 +7,8 @@ import {
     useTransition,
 } from "react"
 
+import { useRouter } from "nextjs-toploader/app"
+
 import {
     Information,
     ToggleGroup,
@@ -33,6 +35,7 @@ export const Findings = ({ companyId, findings }: {
     const [kind, setKind] = useState<string>("all")
     const [deleting, setDeleting] = useState<string>()
     const [error, setError] = useState<string>()
+    const router = useRouter()
     const [, startTransition] = useTransition()
 
     const options = useMemo(() => [
@@ -54,7 +57,10 @@ export const Findings = ({ companyId, findings }: {
         setDeleting(id)
         setError(undefined)
         const res = await deleteFindingAction(companyId, id)
-        if (!res.success) setError(res.error ?? "Couldn't delete the finding")
+        if (!res.success)
+            setError(res.error ?? "Couldn't delete the finding")
+        else router.refresh()
+
         setDeleting(undefined)
     })
 

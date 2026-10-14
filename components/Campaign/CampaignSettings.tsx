@@ -117,7 +117,7 @@ const Basics = ({ campaign }: { campaign: ICampaign }) => {
                                 loading={isPending}
                                 onClick={() => save({ 
                                     name: name.trim(),
-                                    description: description.trim() 
+                                    description: description.trim(),
                                 })}
                             >
                                 Save
@@ -159,6 +159,22 @@ const Basics = ({ campaign }: { campaign: ICampaign }) => {
                             save({ workflow: option.value as WORKFLOW })
                         }
                     />
+                    {
+                        (campaign.workflow === "inbound" || campaign.workflow === "both") &&
+                        <TextField
+                            key={campaign.gmailLabel}
+                            label="Gmail sync label"
+                            defaultValue={campaign.gmailLabel}
+                            disabled={isPending}
+                            placeholder="INBOX or your Gmail label name"
+                            helperText="Inbound sync uses this label for this campaign. Leave blank to use INBOX."
+                            onBlur={e => {
+                                const trimmed = e.target.value.trim()
+                                if (trimmed === campaign.gmailLabel) return
+                                save({ gmailLabel: trimmed })
+                            }}
+                        />
+                    }
                 </div>
 
                 {

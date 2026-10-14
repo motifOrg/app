@@ -6,6 +6,8 @@ import {
     useTransition,
 } from "react"
 
+import { useRouter } from "nextjs-toploader/app"
+
 import {
     Button,
     Information,
@@ -81,6 +83,7 @@ const FindingFields = ({ companyId, onClose }: {
     const [source, setSource] = useState<string>("")
     const [errors, setErrors] = useState<Record<string, string>>({})
     const [isPending, startTransition] = useTransition()
+    const router = useRouter()
 
     const submit = () => {
         const next: Record<string, string> = {}
@@ -98,8 +101,13 @@ const FindingFields = ({ companyId, onClose }: {
                 content: content.trim(),
                 source_url: source.trim() || undefined,
             })
-            if (!res.success) setErrors({ form: res.error ?? "Couldn't save the finding" })
-            else onClose()
+            if (!res.success) {
+                setErrors({ form: res.error ?? "Couldn't save the finding" })
+                return
+            }
+
+            onClose()
+            router.refresh()
         })
     }
 

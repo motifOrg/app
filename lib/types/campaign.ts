@@ -38,6 +38,7 @@ export interface IRawCampaign {
     description: string
     status: CAMPAIGN_STATUS
     workflow: WORKFLOW
+    gmail_label: string
     icp?: IRawICP
     company_count: number
     opportunity_count: number
@@ -51,6 +52,7 @@ export interface ICampaign {
     description: string
     status: CAMPAIGN_STATUS
     workflow: WORKFLOW
+    gmailLabel: string
     icp?: IICP
     companyCount: number
     opportunityCount: number
@@ -114,6 +116,7 @@ export const serializeCampaign = (
     description: campaign?.description,
     status: campaign?.status,
     workflow: campaign?.workflow,
+    gmailLabel: campaign?.gmail_label ?? "",
     icp: campaign?.icp ? serializeICP(campaign.icp) : undefined,
     companyCount: campaign?.company_count ?? 0,
     opportunityCount: campaign?.opportunity_count ?? 0,

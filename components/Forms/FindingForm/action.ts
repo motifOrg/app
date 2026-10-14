@@ -1,7 +1,7 @@
 "use server"
 
 // #region imports
-import { refresh } from "next/cache"
+import { revalidatePath, refresh } from "next/cache"
 
 import {
     createFinding,
@@ -11,6 +11,9 @@ import {
 
 export const findingAction = async (companyId: string, input: IFindingInput) => {
     const res = await createFinding(companyId, input)
-    if (res.success) refresh()
+    if (res.success) {
+        refresh()
+        revalidatePath(`/companies/${companyId}`)
+    }
     return { success: res.success, error: res.error }
 }

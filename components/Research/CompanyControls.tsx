@@ -7,7 +7,7 @@ import {
     useTransition,
 } from "react"
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "nextjs-toploader/app"
 
 import {
     Button,
@@ -70,8 +70,6 @@ export const CompanyControls = ({ company, researchEnabled }: {
     const [isResearching, startResearch] = useTransition()
     const router = useRouter()
 
-    const enriching = company.researchStatus === "in_progress"
-
     const [state, apply] = useOptimistic<IState, Partial<IState>>(
         {
             priority: company.priority,
@@ -110,6 +108,7 @@ export const CompanyControls = ({ company, researchEnabled }: {
                 return
             }
 
+            apply({ researchStatus: "complete" })
             router.refresh()
         })
     }
@@ -159,16 +158,13 @@ export const CompanyControls = ({ company, researchEnabled }: {
                         size="sm"
                         startIcon={<Sparkle size={12}/>}
                         onClick={research}
-                        loading={isResearching || enriching}
+                        loading={isResearching}
                         loadingText="Researching"
                     >
                         Run AI research
                     </Button>
 
-                    {
-                        (isResearching || enriching) && 
-                        <ResearchSteps/>
-                    }
+                    {isResearching && <ResearchSteps/>}
                 </div>
                 <Tooltip content="Delete company">
                     <IconButton variant="ghost" size="sm" aria-label="Delete company" onClick={() => setConfirm(true)}>

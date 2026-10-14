@@ -20,9 +20,10 @@ import { IIntegrations } from "@/lib"
 import { syncGmailAction } from "./actions"
 // #endregion
 
-export const GmailSetup = ({ gmail, campaignId }: { 
+export const GmailSetup = ({ gmail, campaignId, gmailLabel }: { 
     gmail: IIntegrations["gmail"]
     campaignId: string
+    gmailLabel: string
 }) => {
     const [open, setOpen] = useState<boolean>(false)
     const [error, setError] = useState<string>()
@@ -83,10 +84,11 @@ export const GmailSetup = ({ gmail, campaignId }: {
                             <Mail size={16}/>
                         </span>
                         <p className="text-grey-300">
-                            Gmail sync reads messages from the label in
-                            <code className="mx-1">GMAIL_LABEL</code>
-                            (default INBOX) using a refresh token in
-                            <code className="mx-1">core/.env</code>.
+                            Gmail sync reads the label set on this campaign
+                            {gmailLabel
+                                ? <> (<code className="mx-1">{gmailLabel}</code>)</>
+                                : " (set Gmail sync label in campaign settings, or leave blank to sync INBOX)"
+                            }.
                         </p>
                     </aside>
 
@@ -135,7 +137,7 @@ export const GmailSetup = ({ gmail, campaignId }: {
                         {[
                             "Create an OAuth client in Google Cloud with the Gmail readonly scope",
                             "Add GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET and GMAIL_REFRESH_TOKEN to core/.env",
-                            "Optional: GMAIL_LABEL (e.g. INBOX or a custom label name), then restart the API",
+                            "Set Gmail sync label on the campaign (e.g. INBOX or a custom label), then restart the API if you changed .env",
                         ].map((step, index) =>
                             <li key={step} className="flex gap-3">
                                 <span className=" pt-0.5">{String(index + 1).padStart(2, "0")}</span>
