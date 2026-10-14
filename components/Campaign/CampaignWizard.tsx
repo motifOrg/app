@@ -74,6 +74,9 @@ export const CampaignWizard = () => {
     const [description, setDescription] = useState<string>("")
     const [icp, setICP] = useState<IICP>(_EMPTY_ICP)
     const [workflow, setWorkflow] = useState<WORKFLOW>("outbound")
+    const [gmailLabel, setGmailLabel] = useState<string>("")
+
+    const syncsGmail = workflow !== "outbound"
 
     const [nameError, setNameError] = useState<string>()
     const [icpErrors, setICPErrors] = useState<IICPErrors>({})
@@ -123,6 +126,7 @@ export const CampaignWizard = () => {
                 description: description.trim(),
                 workflow,
                 status,
+                gmailLabel: syncsGmail ? gmailLabel.trim() : "",
                 icp,
             })
 
@@ -304,7 +308,21 @@ export const CampaignWizard = () => {
 
                     {
                         current.id === "workflow" &&
-                        <WorkflowPicker value={workflow} onChange={setWorkflow}/>
+                        <aside className="flex flex-col gap-4">
+                            <WorkflowPicker value={workflow} onChange={setWorkflow}/>
+                            {
+                                syncsGmail &&
+                                <TextField
+                                    label="Gmail sync label"
+                                    placeholder="INBOX or your Gmail label name"
+                                    helperText="Inbound sync reads this label for this campaign. Leave blank to use INBOX."
+                                    value={gmailLabel}
+                                    maxLength={120}
+                                    onChange={e => setGmailLabel(e.target.value)}
+                                    className="max-w-xl"
+                                />
+                            }
+                        </aside>
                     }
 
                     {
@@ -331,6 +349,14 @@ export const CampaignWizard = () => {
                                 <p className="text-grey-300 text-xs">
                                     {WORKFLOW_META[workflow].description}
                                 </p>
+                                {
+                                    syncsGmail &&
+                                    <p className="text-grey-300 text-xs">
+                                        Gmail label: <span className="font-semibold text-charcoal-100">
+                                            {gmailLabel.trim() || "INBOX"}
+                                        </span>
+                                    </p>
+                                }
                             </Section>
 
                             {

@@ -167,7 +167,6 @@ const Basics = ({ campaign }: { campaign: ICampaign }) => {
                             defaultValue={campaign.gmailLabel}
                             disabled={isPending}
                             placeholder="INBOX or your Gmail label name"
-                            helperText="Inbound sync uses this label for this campaign. Leave blank to use INBOX."
                             onBlur={e => {
                                 const trimmed = e.target.value.trim()
                                 if (trimmed === campaign.gmailLabel) return

@@ -92,6 +92,7 @@ export const createCampaign = async(
             description: input.description,
             workflow: input.workflow,
             status: input.status,
+            gmail_label: input.gmailLabel,
             icp: input.icp ? deserializeICP(input.icp) : undefined,
         })
     })
@@ -111,7 +112,13 @@ export const updateCampaign = async(
     input: Partial<Omit<ICampaignInput, "icp">>
 ): Promise<IResponse<ICampaign>> => {
     const res = await _PATCH<IRawCampaign>(`${_CAMPAIGNS_URL}/${id}`, {}, {
-        body: JSON.stringify(input)
+        body: JSON.stringify({
+            name: input.name,
+            description: input.description,
+            workflow: input.workflow,
+            status: input.status,
+            gmail_label: input.gmailLabel,
+        })
     })
 
     if(res.success && res.data){
