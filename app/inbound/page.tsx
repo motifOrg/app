@@ -14,6 +14,7 @@ import {
 	Drafts,
 	EmptyState,
 	ErrorComponent,
+	EvaluateDeal,
 	FitScore,
 	GmailSetup,
 	Header,
@@ -46,8 +47,9 @@ const _EMPTY_COUNTS: IOpportunityCounts = {
 	declined: 0,
 }
 
-const Deal = async({ id }: { 
+const Deal = async({ id, ai }: { 
     id: string 
+    ai: boolean
 }) => {
 	const [
 		{ success, data: deal, status, error },
@@ -130,8 +132,21 @@ const Deal = async({ id }: {
                         flex-1 min-w-64 text-grey-300 
                         leading-relaxed
                     ">
-						{deal.fitSummary || "No fit summary yet. Scoring inbound deals needs the research provider, which isn't connected. Read the email and qualify it by hand."}
+						{
+                            deal.fitSummary || (
+                                ai
+                                    ? "Not evaluated yet. New deals are scored in the background after sync or logging; evaluate now to score this one against the ICP."
+                                    : "Not evaluated. Set OPENAI_API_KEY in core/.env to score deals against the ICP, or qualify this one by hand."
+                            )
+                        }
 					</p>
+					{
+                        ai && 
+                        <EvaluateDeal 
+                            id={deal.id} 
+                            scored={deal.fitScore !== null}
+                        />
+                    }
 				</div>
 				{
 					deal.companyId &&
@@ -274,7 +289,7 @@ const InboundPage = async ({
 					/>
 					{
 						selected
-							? <Deal key={selected} id={selected}/>
+							? <Deal key={selected} id={selected} ai={integrations?.research.enabled ?? false}/>
 							: <EmptyState title="Nothing selected" description="Pick a deal from the list."/>
 					}
 				</section>

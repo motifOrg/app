@@ -1,3 +1,4 @@
+export * from "./EvaluateDeal"
 export * from "./GmailSetup"
 export * from "./InboundList"
 export * from "./OpportunityControls"

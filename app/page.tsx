@@ -9,6 +9,7 @@ import {
 import {
     Stat,
     CompanyForm,
+    ExportButton,
     ImportForm,
     LeadsToolbar,
     EmptyState,
@@ -122,6 +123,19 @@ const LeadsPage = async ({
                 title="Leads"
                 actions={
                     <>
+                        {
+                            count > 0 &&
+                            <ExportButton
+                                query={{
+                                    campaign_id: campaign.id,
+                                    q: query.q,
+                                    priority: query.priority,
+                                    research_status: query.research_status,
+                                    evaluation_status: query.evaluation_status,
+                                    sort: query.sort,
+                                }}
+                            />
+                        }
                         <ImportForm campaignId={campaign.id}/>
                         <CompanyForm campaignId={campaign.id}/>
                     </>

@@ -12,7 +12,7 @@ import {
 } from "@/base"
 
 import { Mail, Plus } from "@/icons"
-import { cn, IDraft } from "@/lib"
+import { IDraft } from "@/lib"
 
 import { EmptyState } from "../Navigation"
 import { createDraftAction } from "./actions"

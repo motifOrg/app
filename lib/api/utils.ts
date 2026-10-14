@@ -110,6 +110,49 @@ const _request = async <T>(
     }
 }
 
+export const _DOWNLOAD = async (
+    url: string,
+    query?: Record<string, unknown>,
+): Promise<IResponse<{ body: string, filename: string }>> => {
+    await connection()
+
+    try {
+        const request = await fetch(
+            `${url}${_parseParams(query)}`,
+            { cache: "no-store" }
+        )
+
+        if(!request.ok){
+            const response: { error?: string } | null =
+                await request.json().catch(() => null)
+
+            return {
+                success: false,
+                status: request.status,
+                error: response?.error || request.statusText || "Unknown error"
+            }
+        }
+
+        const disposition = request.headers.get("content-disposition") ?? ""
+
+        return {
+            success: true,
+            data: {
+                body: await request.text(),
+                filename: disposition.match(/filename="(.+)"/)?.[1] ?? "motif-leads.csv",
+            }
+        }
+    }
+    catch(e){
+        console.error(e)
+        return {
+            success: false,
+            status: 0,
+            error: "Can't reach the Motif API. Is the core server running?"
+        }
+    }
+}
+
 export const _GET = async <T>(
     url: string,
     query?: Record<string, unknown>,

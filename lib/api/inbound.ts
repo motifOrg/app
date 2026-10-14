@@ -123,6 +123,21 @@ export const updateOpportunity = async(
     return { success: false, error: res.error }
 }
 
+export const evaluateOpportunity = async(
+    id: string
+): Promise<IResponse<IOpportunity>> => {
+    const res = await _POST<IRawOpportunity>(`${_INBOUND_URL}/${id}/evaluate`)
+
+    if(res.success && res.data){
+        return {
+            success: true,
+            data: serializeOpportunity(res.data)
+        }
+    }
+
+    return { success: false, error: res.error, status: res.status }
+}
+
 export const getDrafts = async(
     query: { company_id?: string, opportunity_id?: string }
 ): Promise<IResponse<IDraft[]>> => {

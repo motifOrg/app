@@ -5,6 +5,7 @@ import { _COMPANIES_URL } from "@/constants"
 
 import {
     _DELETE,
+    _DOWNLOAD,
     _GET,
     _PATCH,
     _POST,
@@ -39,6 +40,11 @@ export interface ICompanyQuery {
     page?: number
     limit?: number
 }
+
+export const exportCompanies = async(
+    query: Omit<ICompanyQuery, "page" | "limit">
+): Promise<IResponse<{ body: string, filename: string }>> =>
+    _DOWNLOAD(`${_COMPANIES_URL}/export`, { ...query })
 
 export interface ICompanyInput {
     campaign_id: string

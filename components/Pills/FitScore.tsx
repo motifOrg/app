@@ -20,7 +20,7 @@ export const FitScore = ({ score, size = "sm" }: {
 }) => {
     if (score === null)
         return (
-            <Tooltip content="No fit score yet. Scoring needs the research provider, which isn't connected.">
+            <Tooltip content="No fit score yet. Run AI research or evaluation to score it against the ICP.">
                 <span className="text-xs text-grey-200 font-semibold cursor-help">
                     Not scored
                 </span>

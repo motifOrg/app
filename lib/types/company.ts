@@ -1,7 +1,7 @@
 export type PRIORITY = "high" | "medium" | "low"
 export type RESEARCH_STATUS = "not_started" | "in_progress" | "complete"
 export type EVALUATION_STATUS = "new" | "shortlisted" | "contacted" | "in_discussion" | "rejected"
-export type COMPANY_SOURCE = "sample" | "csv" | "manual" | "inbound"
+export type COMPANY_SOURCE = "sample" | "csv" | "manual" | "inbound" | "gmail"
 export type FINDING_KIND = "fit" | "finding" | "risk" | "missing" | "next_action"
 export type EVIDENCE_STATUS = "sample" | "unverified" | "verified"
 export type CONFIDENCE = "high" | "medium" | "low"
