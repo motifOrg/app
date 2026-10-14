@@ -173,7 +173,7 @@ const CompanyPage = async ({ params }: {
 									title="Outreach draft"
 									description="Templates use the company and owner details. Review before copying. Motif never sends email."
 								>
-									<Drafts kind="outreach" companyId={id} drafts={drafts}/>
+									<Drafts kind="outreach" companyId={id} drafts={drafts} ai={researchEnabled}/>
 								</Card>,
 						},
 					]}

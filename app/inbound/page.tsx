@@ -193,12 +193,17 @@ const InboundPage = async ({
 
 	if (list.length === 0)
 		return (
-			<EmptyState
-				icon={<Target size={16}/>}
-				title="Create a campaign first"
-				description="Inbound deals are checked against a campaign's ICP, so you need one before logging deals."
-				action={<Link href="/campaigns/new"><Button size="sm">Create a campaign</Button></Link>}
-			/>
+            <>
+                <Header
+                    title="Inbound"
+                />
+                <EmptyState
+                    icon={<Target size={16}/>}
+                    title="Create a campaign first"
+                    description="Inbound deals are checked against a campaign's ICP, so you need one before logging deals."
+                    action={<Link href="/campaigns/new"><Button size="sm">Create a campaign</Button></Link>}
+                />
+            </>
 		)
 
 	const campaign =
@@ -244,7 +249,7 @@ const InboundPage = async ({
 				<Information
 					variant="warning"
 					title="Gmail isn't connected"
-					description="Set GMAIL_CREDENTIALS and GMAIL_USER in core/.env, then restart the API. Until then, log deals by hand."
+					description="Set GMAIL_USER and GMAIL_APP_PASSWORD in core/.env, then restart the API. Until then, log deals by hand."
 				/>
 			}
 
@@ -260,7 +265,7 @@ const InboundPage = async ({
 					action={<OpportunityForm campaignId={campaign.id}/>}
 				/> :
 
-				<section className="grid grid-cols-[400px_1fr] gap-5 items-start max-tablet:grid-cols-1">
+				<section className="flex gap-4">
 					<InboundList
 						key={campaign.id}
 						opportunities={opportunities}

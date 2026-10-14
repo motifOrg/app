@@ -135,8 +135,8 @@ export const GmailSetup = ({ gmail, campaignId, gmailLabel }: {
 
                     <ol className="flex flex-col gap-2">
                         {[
-                            "Create a service account in Google Cloud and allow it the Gmail readonly scope through domain-wide delegation in Workspace admin",
-                            "Set GMAIL_CREDENTIALS to the key file path and GMAIL_USER to the mailbox in core/.env",
+                            "Turn on 2-step verification for the Google account, then create an app password at myaccount.google.com/apppasswords",
+                            "Set GMAIL_USER to the address and GMAIL_APP_PASSWORD to the app password in core/.env",
                             "Set Gmail sync label on the campaign (e.g. INBOX or a custom label), then restart the API if you changed .env",
                         ].map((step, index) =>
                             <li key={step} className="flex gap-3">

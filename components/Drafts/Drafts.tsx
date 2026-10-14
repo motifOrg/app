@@ -19,11 +19,12 @@ import { createDraftAction } from "./actions"
 import { DraftEditor } from "./DraftEditor"
 // #endregion
 
-export const Drafts = ({ drafts, companyId, opportunityId, kind }: {
+export const Drafts = ({ drafts, companyId, opportunityId, kind, ai = false }: {
     drafts: IDraft[]
     companyId?: string
     opportunityId?: string
     kind: "outreach" | "reply"
+    ai?: boolean
 }) => {
     const [selected, setSelected] = useState<string | undefined>(drafts[0]?.id)
     const [error, setError] = useState<string>()
@@ -49,9 +50,11 @@ export const Drafts = ({ drafts, companyId, opportunityId, kind }: {
                     icon={<Mail size={16}/>}
                     title={`No ${label} drafted yet`}
                     description={
-                        kind === "outreach"
-                            ? "Start from a template filled in with this company's details. Edit it, mark it reviewed, then copy it into your mail client."
-                            : "Start a reply from a template that references the deal. Nothing is sent from Motif."
+                        kind === "reply"
+                            ? "Start a reply from a template that references the deal. Nothing is sent from Motif."
+                            : ai
+                                ? "AI writes a first email from this company's profile and findings, your campaign thesis and ICP. Edit it, mark it reviewed, then copy it into your mail client."
+                                : "Start from a template filled in with this company's details. Set OPENAI_API_KEY to have AI write it from the company and your ICP."
                     }
                     action={
                         <Button 

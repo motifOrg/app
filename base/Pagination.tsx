@@ -173,7 +173,7 @@ const Pagination = forwardRef<HTMLElement, PaginationProps>(
 						<Button
 							key={p}
 							type="button"
-							variant={p === page ? "soft" : "ghost"}
+							variant="ghost"
 							size="xs"
 							className={pageBtnClasses(p === page)}
 							disabled={disabled}

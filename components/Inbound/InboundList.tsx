@@ -44,7 +44,7 @@ export const InboundList = ({ opportunities, counts, selected }: {
     }
 
     return (
-        <aside className="rounded-2xl bg-paper ring-1 ring-grey-100 flex flex-col min-h-0">
+        <aside className="rounded-2xl bg-paper ring-1 ring-grey-100 flex flex-col min-h-0 w-[30%]">
             <header className="p-3 pb-0 flex flex-col gap-3 border-b border-grey-150">
                 <TextField
                     value={query}
