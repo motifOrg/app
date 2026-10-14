@@ -1,6 +1,5 @@
 export type CAMPAIGN_STATUS = "draft" | "active" | "paused" | "archived"
 export type WORKFLOW = "outbound" | "inbound" | "both"
-export type DOCUMENT_STATUS = "uploaded" | "processing" | "processed" | "failed"
 
 export interface IRawICP {
     thesis: string
@@ -42,7 +41,6 @@ export interface IRawCampaign {
     icp?: IRawICP
     company_count: number
     opportunity_count: number
-    document_count: number
     created_at: string
     updated_at: string
 }
@@ -56,7 +54,6 @@ export interface ICampaign {
     icp?: IICP
     companyCount: number
     opportunityCount: number
-    documentCount: number
     createdAt: Date
     updatedAt: Date
 }
@@ -77,26 +74,6 @@ export interface ICampaignStats {
     shortlisted: number
     contacted: number
     inboundNew: number
-}
-
-export interface IRawDocument {
-    id: string
-    campaign_id: string
-    filename: string
-    mime_type: string
-    size_bytes: number
-    status: DOCUMENT_STATUS
-    created_at: string
-}
-
-export interface IDocument {
-    id: string
-    campaignId: string
-    filename: string
-    mimeType: string
-    size: number
-    status: DOCUMENT_STATUS
-    createdAt: Date
 }
 
 export const serializeICP = (icp: IRawICP): IICP => ({
@@ -140,7 +117,6 @@ export const serializeCampaign = (
     icp: campaign?.icp ? serializeICP(campaign.icp) : undefined,
     companyCount: campaign?.company_count ?? 0,
     opportunityCount: campaign?.opportunity_count ?? 0,
-    documentCount: campaign?.document_count ?? 0,
     createdAt: new Date(campaign?.created_at),
     updatedAt: new Date(campaign?.updated_at),
 })
@@ -154,16 +130,4 @@ export const serializeCampaignStats = (
     shortlisted: stats?.shortlisted ?? 0,
     contacted: stats?.contacted ?? 0,
     inboundNew: stats?.inbound_new ?? 0,
-})
-
-export const serializeDocument = (
-    document: IRawDocument
-): IDocument => ({
-    id: document?.id,
-    campaignId: document?.campaign_id,
-    filename: document?.filename,
-    mimeType: document?.mime_type,
-    size: document?.size_bytes,
-    status: document?.status,
-    createdAt: new Date(document?.created_at),
 })

@@ -1,10 +1,7 @@
 "use server"
 
 // #region imports
-import {
-    _CAMPAIGNS_URL,
-    _DOCUMENTS_URL,
-} from "@/constants"
+import { _CAMPAIGNS_URL } from "@/constants"
 
 import {
     _DELETE,
@@ -19,18 +16,15 @@ import {
     CAMPAIGN_STATUS,
     ICampaign,
     ICampaignStats,
-    IDocument,
     IICP,
     IImportResult,
     IRawCampaign,
     IRawCampaignStats,
-    IRawDocument,
     IRawICP,
     WORKFLOW,
     deserializeICP,
     serializeCampaign,
     serializeCampaignStats,
-    serializeDocument,
     serializeICP,
 } from "@/lib/types"
 // #endregion
@@ -152,46 +146,6 @@ export const updateICP = async(
     }
 
     return { success: false, error: res.error }
-}
-
-export const getDocuments = async(
-    id: string
-): Promise<IResponse<IDocument[]>> => {
-    const res = await _GET<IRawDocument[]>(`${_CAMPAIGNS_URL}/${id}/documents`)
-
-    if(res.success && res.data){
-        return {
-            success: true,
-            data: res.data.map(serializeDocument)
-        }
-    }
-
-    return { success: false, error: res.error }
-}
-
-export const uploadDocument = async(
-    id: string,
-    form: FormData
-): Promise<IResponse<IDocument>> => {
-    const res = await _POST<IRawDocument>(`${_CAMPAIGNS_URL}/${id}/documents`, {}, {
-        body: form
-    })
-
-    if(res.success && res.data){
-        return {
-            success: true,
-            data: serializeDocument(res.data)
-        }
-    }
-
-    return { success: false, error: res.error }
-}
-
-export const deleteDocument = async(
-    id: string
-): Promise<IResponse<null>> => {
-    const res = await _DELETE<null>(`${_DOCUMENTS_URL}/${id}`)
-    return { success: res.success, error: res.error }
 }
 
 export const importCompanies = async(

@@ -226,7 +226,13 @@ const InboundPage = async ({
 				title="Inbound"
 				actions={
 					<>
-						{gmail && <GmailSetup gmail={gmail}/>}
+						{
+                            gmail && 
+                            <GmailSetup 
+                                gmail={gmail} 
+                                campaignId={campaign.id}
+                            />
+                        }
 						<OpportunityForm campaignId={campaign.id}/>
 					</>
 				}
@@ -237,7 +243,7 @@ const InboundPage = async ({
 				<Information
 					variant="warning"
 					title="Gmail isn't connected"
-					description="Deals here are seed samples or ones you logged by hand. Motif won't show inbox data until the Gmail integration is built and connected."
+					description="Set GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET and GMAIL_REFRESH_TOKEN in core/.env, then restart the API. Until then, log deals by hand."
 				/>
 			}
 

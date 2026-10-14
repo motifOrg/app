@@ -1,6 +1,5 @@
 export * from "./CampaignSettings"
 export * from "./CampaignWizard"
-export * from "./Documents"
 export * from "./ICPEditor"
 export * from "./ICPSummary"
 export * from "./WorkflowPicker"

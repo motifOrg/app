@@ -7,6 +7,8 @@ import {
     useTransition,
 } from "react"
 
+import { useRouter } from "next/navigation"
+
 import {
     Button,
     Dropzone,
@@ -42,6 +44,7 @@ const _HEADERS = [
 export const ImportForm = ({ campaignId }: {
     campaignId: string
 }) => {
+    const router = useRouter()
     const [open, setOpen] = useState(false)
     const [file, setFile] = useState<File>()
     const [error, setError] = useState<string>()
@@ -52,6 +55,16 @@ export const ImportForm = ({ campaignId }: {
         setFile(undefined)
         setError(undefined)
         setResult(undefined)
+    }
+
+    const dismiss = () => {
+        setOpen(false)
+        reset()
+    }
+
+    const finish = () => {
+        setOpen(false)
+        router.refresh()
     }
 
     const submit = () => {
@@ -65,8 +78,10 @@ export const ImportForm = ({ campaignId }: {
 
             const res = await importAction(campaignId, form)
 
-            if (res.success && "data" in res && res.data)
+            if (res.success && "data" in res && res.data) {
                 setResult(res.data)
+                router.refresh()
+            }
             else
                 setError(res.error ?? "Import failed.")
         })
@@ -78,6 +93,8 @@ export const ImportForm = ({ campaignId }: {
                 variant="secondary"
                 size="sm"
                 startIcon={<Upload size={12} />}
+                loading={isPending}
+                loadingText="Importing"
                 onClick={() => {
                     reset()
                     setOpen(true)
@@ -88,11 +105,32 @@ export const ImportForm = ({ campaignId }: {
 
             <Modal
                 open={open}
-                onClose={() => !isPending && setOpen(false)}
+                onClose={() => !isPending && dismiss()}
                 title="Import companies from CSV"
                 size="md"
             >
-                {result ? (
+                {isPending ? (
+                    <section className="
+                        flex flex-col gap-4 items-center 
+                        py-10 text-center
+                    ">
+                        <span
+                            className="
+                                loading loading-spinner loading-lg 
+                                text-mint-300
+                            "
+                        />
+
+                        <div className="flex flex-col gap-1">
+                            <p className="font-bold">
+                                Importing companies
+                            </p>
+                            <p className="text-xs text-grey-300">
+                                Parsing your CSV and adding leads to this campaign.
+                            </p>
+                        </div>
+                    </section>
+                ) : result ? (
                     <section className="flex flex-col gap-4">
                         <aside className="grid grid-cols-3 gap-2">
                             {[
@@ -140,8 +178,11 @@ export const ImportForm = ({ campaignId }: {
                         )}
 
                         <p className="text-xs text-grey-200">
-                            Imported companies start unscored with research not started.
-                            Duplicates are matched on domain within this campaign.
+                            {
+                                result.inserted > 0
+                                    ? "AI enrichment runs in the background. Reload the list to see research results."
+                                    : "Duplicates are matched on domain within this campaign."
+                            }
                         </p>
 
                         <div className="flex gap-2 justify-end">
@@ -155,7 +196,7 @@ export const ImportForm = ({ campaignId }: {
 
                             <Button
                                 size="sm"
-                                onClick={() => setOpen(false)}
+                                onClick={finish}
                             >
                                 Done
                             </Button>
@@ -188,7 +229,6 @@ export const ImportForm = ({ campaignId }: {
                                     variant="ghost"
                                     size="xs"
                                     onClick={reset}
-                                    disabled={isPending}
                                 >
                                     Change
                                 </Button>
@@ -241,8 +281,7 @@ export const ImportForm = ({ campaignId }: {
                             <Button
                                 variant="secondary"
                                 size="sm"
-                                onClick={() => setOpen(false)}
-                                disabled={isPending}
+                                onClick={dismiss}
                             >
                                 Cancel
                             </Button>

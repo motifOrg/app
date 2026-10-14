@@ -43,7 +43,7 @@ export const MessageCard = ({
                 className="
                     w-7 h-7 rounded-full shrink-0 flex
                     items-center justify-center
-                    bg-mint-300 text-white
+                    bg-mint-50 text-white
                     data-[end=true]:bg-grey-150
                     data-[end=true]:text-grey-300
                 "

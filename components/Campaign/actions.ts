@@ -7,11 +7,9 @@ import { redirect } from "next/navigation"
 import {
     createCampaign,
     deleteCampaign,
-    deleteDocument,
     ICampaignInput,
     updateCampaign,
     updateICP,
-    uploadDocument,
 } from "@/lib/api"
 
 import { IICP } from "@/lib/types"
@@ -43,16 +41,3 @@ export const updateICPAction = async (id: string, icp: IICP) => {
     if (res.success) refresh()
     return { success: res.success, error: res.error }
 }
-
-export const uploadDocumentAction = async (id: string, form: FormData) => {
-    const res = await uploadDocument(id, form)
-    return { success: res.success, error: res.error, document: res.data }
-}
-
-export const deleteDocumentAction = async (id: string) => {
-    const res = await deleteDocument(id)
-    if (res.success) refresh()
-    return { success: res.success, error: res.error }
-}
-
-export const refreshAction = async () => refresh()

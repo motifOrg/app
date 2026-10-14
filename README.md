@@ -26,8 +26,8 @@ Open [http://localhost:3000](http://localhost:3000). The API must be running on 
 |-------|--------|
 | `/` | Leads portal: campaign selector, stats, searchable / filterable / sortable target table with inline priority and stage edits, CSV import, add company |
 | `/campaigns` | Campaign cards, including archived ones |
-| `/campaigns/new` | Five-step setup wizard: basics, ICP, documents, workflow, review |
-| `/campaigns/[id]` | Campaign settings: basics, status, workflow, ICP edit, documents, delete |
+| `/campaigns/new` | Four-step setup wizard: basics, ICP, workflow, review |
+| `/campaigns/[id]` | Campaign settings: basics, status, workflow, ICP edit, delete |
 | `/companies/[id]` | Target research: profile, ICP criteria check, findings, risks, next actions, outreach drafts, research chat |
 | `/inbound` | Inbound deals: status tabs, detail, ICP fit, reply drafts, Gmail setup state |
 
@@ -57,4 +57,3 @@ Conventions come from the Lens app and Stitchd: `// #region imports`, `"use serv
 - "Run AI research" and the research chat show a setup-required state until a research provider is wired in the API.
 - Gmail sync shows the missing environment variables reported by the API. Inbound deals are seed data or logged by hand.
 - Drafts can be edited, reviewed and copied. Send is disabled; Motif never sends email.
-- Uploaded documents are stored with metadata only and marked "Not parsed".

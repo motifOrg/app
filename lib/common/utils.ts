@@ -76,18 +76,3 @@ export const initials = (value?: string) =>
         .slice(0, 2)
         .map(word => word[0]?.toUpperCase())
         .join("")
-
-export const capitalize = (value?: string) => {
-    if (!value || typeof value !== "string")
-        return ""
-
-    return value
-        .trim()
-        .split(/[-_]+/g)
-        .map(
-            word =>
-                word.charAt(0).toUpperCase() +
-                word.slice(1).toLowerCase()
-        )
-        .join(" ")
-}

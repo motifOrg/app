@@ -10,10 +10,7 @@ import {
 	Header,
 } from "@/components"
 
-import {
-	getCampaign,
-	getDocuments,
-} from "@/lib"
+import { getCampaign } from "@/lib"
 // #endregion
 
 const CampaignPage = async ({ params }: {
@@ -21,13 +18,11 @@ const CampaignPage = async ({ params }: {
 }) => {
 	const { id } = await params
 
-	const [
-		{ success, data: campaign, status, error },
-		{ data: documents = [] },
-	] = await Promise.all([
-		getCampaign(id),
-		getDocuments(id),
-	])
+	const { 
+        success, 
+        data: campaign, 
+        status, error 
+    } = await getCampaign(id)
 
 	if (status === 404 || status === 400)
 		notFound()
@@ -50,10 +45,9 @@ const CampaignPage = async ({ params }: {
 					</>
 				}
 			/>
-			<CampaignSettings
-				campaign={campaign}
-				documents={documents}
-			/>
+			<CampaignSettings 
+                campaign={campaign}
+            />
 		</>
 	)
 }

@@ -31,8 +31,8 @@ export const createOpportunityAction = async (input: IOpportunityInput) => {
     return { success: res.success, error: res.error, id: res.data?.id }
 }
 
-export const syncGmailAction = async () => {
-    const res = await syncGmail()
+export const syncGmailAction = async (campaignId: string) => {
+    const res = await syncGmail(campaignId)
     if (res.success) refresh()
     return { success: res.success, error: res.error, status: res.status }
 }

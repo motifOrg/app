@@ -6,6 +6,8 @@ import {
     useTransition,
 } from "react"
 
+import { useRouter } from "next/navigation"
+
 import {
     Button,
     Information,
@@ -18,12 +20,14 @@ import { IIntegrations } from "@/lib"
 import { syncGmailAction } from "./actions"
 // #endregion
 
-export const GmailSetup = ({ gmail }: { 
+export const GmailSetup = ({ gmail, campaignId }: { 
     gmail: IIntegrations["gmail"]
+    campaignId: string
 }) => {
     const [open, setOpen] = useState<boolean>(false)
     const [error, setError] = useState<string>()
     const [isPending, startTransition] = useTransition()
+    const router = useRouter()
 
     const sync = () => {
         if (!gmail.connected) {
@@ -32,9 +36,13 @@ export const GmailSetup = ({ gmail }: {
         }
         startTransition(async () => {
             setError(undefined)
-            const res = await syncGmailAction()
-            if (!res.success) 
+            const res = await syncGmailAction(campaignId)
+            if (!res.success) {
                 setError(res.error ?? "Sync failed")
+                return
+            }
+
+            router.refresh()
         })
     }
 
@@ -75,8 +83,10 @@ export const GmailSetup = ({ gmail }: {
                             <Mail size={16}/>
                         </span>
                         <p className="text-grey-300">
-                            Gmail sync will pull broker and owner emails into this list and check them against the campaign ICP.
-                            It isn&apos;t live yet, so Motif doesn&apos;t read your inbox or show fake messages.
+                            Gmail sync reads messages from the label in
+                            <code className="mx-1">GMAIL_LABEL</code>
+                            (default INBOX) using a refresh token in
+                            <code className="mx-1">core/.env</code>.
                         </p>
                     </aside>
 
@@ -89,11 +99,9 @@ export const GmailSetup = ({ gmail }: {
                         </span>
 
                         <p className="font-bold">
-                            {
-                                gmail.status === "setup_required" ? 
-                                "Setup required" : 
-                                "OAuth client not built"
-                            }
+                            {gmail.status === "setup_required"
+                                ? "Setup required"
+                                : "Not connected"}
                         </p>
                         
                         <p className="text-grey-300 text-xs">
@@ -125,9 +133,9 @@ export const GmailSetup = ({ gmail }: {
 
                     <ol className="flex flex-col gap-2">
                         {[
-                            "Create an OAuth client in Google Cloud with the gmail.readonly scope",
-                            "Set the Gmail client ID, secret, redirect URL and a 32-byte TOKEN_ENCRYPTION_KEY",
-                            "Build the provider behind the MailProvider interface. Tokens must be encrypted at rest",
+                            "Create an OAuth client in Google Cloud with the Gmail readonly scope",
+                            "Add GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET and GMAIL_REFRESH_TOKEN to core/.env",
+                            "Optional: GMAIL_LABEL (e.g. INBOX or a custom label name), then restart the API",
                         ].map((step, index) =>
                             <li key={step} className="flex gap-3">
                                 <span className=" pt-0.5">{String(index + 1).padStart(2, "0")}</span>

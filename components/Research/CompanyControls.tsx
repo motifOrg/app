@@ -7,6 +7,8 @@ import {
     useTransition,
 } from "react"
 
+import { useRouter } from "next/navigation"
+
 import {
     Button,
     IconButton,
@@ -41,6 +43,8 @@ import {
     deleteCompanyAction,
     runResearchAction,
 } from "./actions"
+
+import { ResearchSteps } from "./ResearchSteps"
 // #endregion
 
 const _PRIORITY = toOptions(PRIORITY_META)
@@ -63,6 +67,10 @@ export const CompanyControls = ({ company, researchEnabled }: {
     const [setup, setSetup] = useState<boolean>(false)
     const [confirm, setConfirm] = useState<boolean>(false)
     const [isPending, startTransition] = useTransition()
+    const [isResearching, startResearch] = useTransition()
+    const router = useRouter()
+
+    const enriching = company.researchStatus === "in_progress"
 
     const [state, apply] = useOptimistic<IState, Partial<IState>>(
         {
@@ -81,7 +89,12 @@ export const CompanyControls = ({ company, researchEnabled }: {
             research_status: patch.researchStatus,
             evaluation_status: patch.evaluationStatus,
         })
-        if (!res.success) setError(res.error ?? "Couldn't save the change")
+        if (!res.success) {
+            setError(res.error ?? "Couldn't save the change")
+            return
+        }
+
+        router.refresh()
     })
 
     const research = () => {
@@ -89,9 +102,15 @@ export const CompanyControls = ({ company, researchEnabled }: {
             setSetup(true)
             return
         }
-        startTransition(async () => {
+        startResearch(async () => {
+            setError(undefined)
             const res = await runResearchAction(company.id)
-            if (!res.success) setError(res.error ?? "Research failed")
+            if (!res.success) {
+                setError(res.error ?? "Research failed")
+                return
+            }
+
+            router.refresh()
         })
     }
 
@@ -101,8 +120,13 @@ export const CompanyControls = ({ company, researchEnabled }: {
     })
 
     return (
-        <div className="flex flex-col gap-2 items-end max-tablet:items-start">
-            <div className="flex items-center gap-2 flex-wrap">
+        <div className="
+            flex flex-col gap-2 items-end max-tablet:items-start
+            overflow-visible
+        ">
+            <div className="
+                flex items-center gap-2 flex-wrap overflow-visible
+            ">
                 <Select
                     required
                     options={_PRIORITY}
@@ -130,15 +154,22 @@ export const CompanyControls = ({ company, researchEnabled }: {
                     buttonStyle={EVALUATION_META[state.evaluationStatus].style}
                     onChange={option => option && update({ evaluationStatus: option.value as EVALUATION_STATUS })}
                 />
-                <Button
-                    size="sm"
-                    startIcon={<Sparkle size={12}/>}
-                    onClick={research}
-                    loading={isPending && researchEnabled}
-                    loadingText="Researching"
-                >
-                    Run AI research
-                </Button>
+                <div className="relative">
+                    <Button
+                        size="sm"
+                        startIcon={<Sparkle size={12}/>}
+                        onClick={research}
+                        loading={isResearching || enriching}
+                        loadingText="Researching"
+                    >
+                        Run AI research
+                    </Button>
+
+                    {
+                        (isResearching || enriching) && 
+                        <ResearchSteps/>
+                    }
+                </div>
                 <Tooltip content="Delete company">
                     <IconButton variant="ghost" size="sm" aria-label="Delete company" onClick={() => setConfirm(true)}>
                         <Delete size={13}/>
@@ -151,12 +182,12 @@ export const CompanyControls = ({ company, researchEnabled }: {
             <Modal open={setup} onClose={() => setSetup(false)} title="AI research isn't connected" size="sm">
                 <div className="flex flex-col gap-4">
                     <p className="text-grey-300">
-                        Automated research needs an AI provider and a source pipeline. Neither is configured,
+                        Automated research needs an OpenAI key. It isn&apos;t set,
                         so Motif won&apos;t invent findings for this company.
                     </p>
                     <ul className="flex flex-col gap-2 text-sm">
                         {[
-                            "Add a research provider in core (the ResearchProvider interface)",
+                            "Set OPENAI_API_KEY in core/.env",
                             "Restart the API so /integrations reports research as ready",
                             "Run research here. Findings arrive with source URLs",
                         ].map((step, index) =>

@@ -12,7 +12,6 @@ import {
 
 import {
     Button,
-    Dropzone,
     Information,
     TextArea,
     TextField,
@@ -22,11 +21,6 @@ import {
     Check,
     Chevron,
 } from "@/icons"
-
-import {
-    _DOCUMENT_TYPES,
-    _MAX_UPLOAD_MB,
-} from "@/constants"
 
 import { WORKFLOW_META } from "@/data"
 
@@ -43,26 +37,15 @@ import {
     validateICP,
 } from "./ICPEditor"
 
-import {
-    FileRow,
-    IQueuedFile,
-    queueFiles,
-} from "./Documents"
-
 import { ICPSummary } from "./ICPSummary"
 import { WorkflowPicker } from "./WorkflowPicker"
 
-import {
-    createCampaignAction,
-    refreshAction,
-    uploadDocumentAction,
-} from "./actions"
+import { createCampaignAction } from "./actions"
 // #endregion
 
 const _STEPS = [
     { id: "basics", title: "Campaign Basics", description: "Name the search so you can find it later." },
     { id: "icp", title: "Ideal Company Profile", description: "The criteria every target and inbound deal is checked against." },
-    { id: "documents", title: "Supporting Documents", description: "Attach your thesis deck or criteria sheet. Optional." },
     { id: "workflow", title: "Sourcing Workflow", description: "Choose how deals will come into this campaign." },
     { id: "review", title: "Review & Create", description: "Check everything before the campaign goes live." },
 ] as const
@@ -91,8 +74,6 @@ export const CampaignWizard = () => {
     const [description, setDescription] = useState<string>("")
     const [icp, setICP] = useState<IICP>(_EMPTY_ICP)
     const [workflow, setWorkflow] = useState<WORKFLOW>("outbound")
-    const [files, setFiles] = useState<IQueuedFile[]>([])
-    const [uploads, setUploads] = useState<string[]>([])
 
     const [nameError, setNameError] = useState<string>()
     const [icpErrors, setICPErrors] = useState<IICPErrors>({})
@@ -150,29 +131,11 @@ export const CampaignWizard = () => {
                 return
             }
 
-            const pending = files.filter(item => item.state === "queued")
-            setUploads(pending.map(item => item.id))
             setCreated(res.id)
-
-            for (const item of pending) {
-                setFiles(prev => prev.map(f => f.id === item.id ? { ...f, state: "uploading" } : f))
-                const form = new FormData()
-                form.append("file", item.file)
-                const upload = await uploadDocumentAction(res.id, form)
-                setFiles(prev => prev.map(f => f.id === item.id
-                    ? upload.success
-                        ? { ...f, state: "done" }
-                        : { ...f, state: "failed", error: upload.error ?? "Upload failed" }
-                    : f
-                ))
-            }
-
-            if (pending.length) await refreshAction()
         })
     }
 
     if (created) {
-        const failed = files.filter(item => item.state === "failed" && uploads.includes(item.id))
         const destination = workflow === "inbound"
             ? `/inbound?campaign=${created}`
             : `/?campaign=${created}`
@@ -203,47 +166,18 @@ export const CampaignWizard = () => {
                     </p>
                 </aside>
 
-                {
-                    uploads.length > 0 &&
-                    <ul className="flex flex-col">
-                        {files.filter(item => uploads.includes(item.id)).map(item =>
-                            <FileRow
-                                key={item.id}
-                                name={item.file.name}
-                                size={item.file.size}
-                                state={item.state === "queued" ? "uploading" : item.state}
-                                error={item.error}
-                            />
-                        )}
-                    </ul>
-                }
-
-                {
-                    failed.length > 0 &&
-                    <Information
-                        variant="warning"
-                        description="Some files didn't upload. You can retry from the campaign settings."
-                    />
-                }
-
-                {
-                    isPending ?
-                    <Button loading loadingText="Uploading documents">
-                        Uploading
-                    </Button> :
-                    <aside className="flex gap-2">
-                        <Link href={destination}>
-                            <Button>
-                                {workflow === "inbound" ? "Go to inbound" : "Go to leads"}
-                            </Button>
-                        </Link>
-                        <Link href={`/campaigns/${created}`}>
-                            <Button variant="secondary">
-                                Campaign settings
-                            </Button>
-                        </Link>
-                    </aside>
-                }
+                <aside className="flex gap-2">
+                    <Link href={destination}>
+                        <Button>
+                            {workflow === "inbound" ? "Go to inbound" : "Go to leads"}
+                        </Button>
+                    </Link>
+                    <Link href={`/campaigns/${created}`}>
+                        <Button variant="secondary">
+                            Campaign settings
+                        </Button>
+                    </Link>
+                </aside>
             </section>
         )
     }
@@ -369,39 +303,6 @@ export const CampaignWizard = () => {
                     }
 
                     {
-                        current.id === "documents" &&
-                        <aside className="flex flex-col gap-4">
-                            <Dropzone
-                                multiple
-                                accept={_DOCUMENT_TYPES}
-                                title="Drop PDFs or presentations here"
-                                hint={`PDF, PPT, PPTX or Keynote · up to ${_MAX_UPLOAD_MB} MB each`}
-                                onFiles={next => setFiles(prev => [...prev, ...queueFiles(next)])}
-                            />
-                            {
-                                files.length > 0 &&
-                                <ul className="flex flex-col">
-                                    {files.map(item =>
-                                        <FileRow
-                                            key={item.id}
-                                            name={item.file.name}
-                                            size={item.file.size}
-                                            state={item.state}
-                                            meta={item.state === "queued" ? "Uploads when you create the campaign" : undefined}
-                                            error={item.error}
-                                            onRemove={() => setFiles(prev => prev.filter(f => f.id !== item.id))}
-                                        />
-                                    )}
-                                </ul>
-                            }
-                            <Information
-                                variant="neutral"
-                                description="Files are stored with the campaign so the team has the source material. Motif doesn't parse them yet, so they won't change scoring."
-                            />
-                        </aside>
-                    }
-
-                    {
                         current.id === "workflow" &&
                         <WorkflowPicker value={workflow} onChange={setWorkflow}/>
                     }
@@ -423,15 +324,7 @@ export const CampaignWizard = () => {
                                 <ICPSummary icp={icp}/>
                             </Section>
 
-                            <Section title="Documents" onEdit={() => go(2)}>
-                                <p className="text-grey-300">
-                                    {files.filter(f => f.state === "queued").length
-                                        ? files.filter(f => f.state === "queued").map(f => f.file.name).join(", ")
-                                        : "No documents attached"}
-                                </p>
-                            </Section>
-
-                            <Section title="Workflow" onEdit={() => go(3)}>
+                            <Section title="Workflow" onEdit={() => go(2)}>
                                 <p className="font-semibold">
                                     {WORKFLOW_META[workflow].label}
                                 </p>
@@ -504,7 +397,7 @@ export const CampaignWizard = () => {
                             onClick={() => go(step + 1)}
                             endIcon={<Chevron direction="right" size={8}/>}
                         >
-                            {current.id === "documents" && files.length === 0 ? "Skip" : "Continue"}
+                            Continue
                         </Button>
                     }
                 </section>

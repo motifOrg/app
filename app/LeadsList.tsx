@@ -83,8 +83,12 @@ export const LeadsList = ({ companies }: {
             priority: patch.priority,
             evaluation_status: patch.evaluationStatus,
         })
-        if (!res.success)
+        if (!res.success) {
             setError(res.error ?? "Couldn't save the change.")
+            return
+        }
+
+        router.refresh()
     })
 
     return (

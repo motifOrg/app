@@ -194,8 +194,8 @@ Promise<IResponse<IIntegrations>> => {
     return { success: false, error: res.error }
 }
 
-export const syncGmail = async():
+export const syncGmail = async(campaignId: string):
 Promise<IResponse<null>> => {
-    const res = await _POST<null>(`${_INTEGRATIONS_URL}/gmail/sync`)
+    const res = await _POST<null>(`${_INTEGRATIONS_URL}/gmail/sync?campaign_id=${campaignId}`)
     return { success: res.success, error: res.error, status: res.status }
 }

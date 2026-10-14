@@ -26,7 +26,6 @@ import {
 import {
     CAMPAIGN_STATUS,
     ICampaign,
-    IDocument,
     IICP,
     WORKFLOW,
 } from "@/lib"
@@ -40,7 +39,6 @@ import {
     validateICP,
 } from "./ICPEditor"
 
-import { Documents } from "./Documents"
 import { ICPSummary } from "./ICPSummary"
 
 import {
@@ -275,8 +273,8 @@ const Danger = ({ campaign }: { campaign: ICampaign }) => {
                 gap-4 flex-wrap
             ">
                 <p className="text-grey-300 max-w-lg">
-                    Deleting removes the ICP, {campaign.companyCount} companies with their research,
-                    {" "}{campaign.opportunityCount} inbound deals and {campaign.documentCount} stored files.
+                    Deleting removes the ICP, {campaign.companyCount} companies with their research
+                    {" "}and {campaign.opportunityCount} inbound deals.
                     Archive it instead if you might come back to it.
                 </p>
                 <Button variant="danger" size="sm" onClick={() => setOpen(true)}>
@@ -337,9 +335,8 @@ const Danger = ({ campaign }: { campaign: ICampaign }) => {
     )
 }
 
-export const CampaignSettings = ({ campaign, documents }: {
+export const CampaignSettings = ({ campaign }: {
     campaign: ICampaign
-    documents: IDocument[]
 }) => (
     <section className="
         grid grid-cols-[1fr_380px] 
@@ -360,12 +357,6 @@ export const CampaignSettings = ({ campaign, documents }: {
                 key={campaign.updatedAt.toISOString()} 
                 campaign={campaign}
             />
-            <Card
-                title="Documents"
-                description={`${documents.length} stored · not parsed yet`}
-            >
-                <Documents campaignId={campaign.id} documents={documents}/>
-            </Card>
         </aside>
     </section>
 )
